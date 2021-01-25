@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    platform: postgresql
+    url: jdbc:tc:postgresql:11.1:///customer_reporting_service
+    username: customer_reports
+    password: customer_reports
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 2
+  liquibase:
+    enabled: true
+    change-log: classpath:/database/liquibase-changeLog.xml

@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://repo1.maven.org/maven2" }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/releases/"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        // Updated version can be passed via command line arg as -PopenApiGeneratorVersion=VERSION
+        classpath "org.openapitools:openapi-generator-gradle-plugin:$openApiGeneratorVersion"
+    }
+}
+
+
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.12.1'
+    compile 'io.swagger:swagger-annotations:1.6.2'
+    compile 'com.google.code.findbugs:jsr305:3.0.2'
+    compile 'javax.annotation:javax.annotation-api:1.3.2'
+}
+
+sourceSets.main.java.srcDirs "generated-sources/api-tools/src/main/java"
+
+apply plugin: 'org.openapi.generator'
+
+openApiValidate {
+    inputSpec = "$rootDir/api-spec/src/main/resources/oas3.0.yaml".toString()
+    recommend = true
+}
+
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "$rootDir/api-spec/src/main/resources/oas3.0.yaml".toString()
+    outputDir = "$rootDir/api-spec/generated-sources/api-tools".toString()
+    modelPackage = "no.posten.ph.consignment.model"
+    configOptions = [
+            dateLibrary: "java8",
+            library: "resttemplate",
+            //serializationLibrary: "jaskson"
+    ]
+    globalProperties = [
+            models: ""
+    ]
+    skipValidateSpec = true
+    logToStderr = true
+    generateAliasAsModel = false
+    // set to true and set environment variable {LANG}_POST_PROCESS_FILE
+    // (e.g. SCALA_POST_PROCESS_FILE) to the linter/formatter to be processed.
+    // This command will be passed one file at a time for most supported post processors.
+    enablePostProcessFile = false
+}

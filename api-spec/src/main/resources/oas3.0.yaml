@@ -1,0 +1,729 @@
+openapi: 3.0.1
+info:
+  title: Consignment Service
+  description: Consignment service API.
+  version: 1.0.0
+servers:
+  - url: https://api.phubposten.no/
+tags:
+  - name: consignment
+    description: This is for EDI consignment service
+paths:
+  /consignment/{consignmentNumber}:
+    get:
+      tags:
+        - consignment
+      summary: Finds Consignment by Consignment Number
+      description: return a consignment
+      operationId: getConsignmentByNumber
+      parameters:
+        - name: consignmentNumber
+          in: path
+          description: Consignment Number to search
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: event
+          in: query
+          description: query parameter for event details required
+          required: true
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/consignment'
+        400:
+          description: Invalid Consignment Number provided
+          content: {}
+        404:
+          description: Consignment not found
+          content: {}
+components:
+  schemas:
+    consignment:
+      type: object
+      properties:
+        consignmentNo:
+          type: string
+        consignmentNoType:
+          type: string
+        consignmentNoIdentifier:
+          type: string
+        consignmentNoIssuer:
+          type: string
+        consignmentMaster:
+          type: string
+        productCode:
+          type: string
+        serviceGroup:
+          type: string
+        termsOfDeliver:
+          type: string
+        numberOfPackages:
+          type: integer
+          format: int32
+        netWeight:
+          type: integer
+          format: int64
+        grossWeight:
+          type: integer
+          format: int64
+        grossVolume:
+          type: integer
+        loadingMetres:
+          type: number
+          multipleOf: 0.01
+        palletFootprints:
+          type: integer
+          format: int64
+        goodsDescription:
+          type: string
+        dgsTotalPoints:
+          type: integer
+        termsType:
+          type: string
+        termsCode:
+          type: string
+        termsLocation:
+          type: string
+        temperatureTransportMin:
+          type: number
+          multipleOf: 0.01
+        temperatureTransportMax:
+          type: number
+          multipleOf: 0.01
+        temperatureStorageMin:
+          type: number
+          multipleOf: 0.01
+        temperatureStorageMax:
+          type: number
+          multipleOf: 0.01
+        agreedDiscount:
+          type: number
+          multipleOf: 0.01
+        orderType:
+          type: string
+        discountRegisteredBy:
+          type: string
+        bookingReference:
+          type: string
+        syntheticStatus:
+          type: string
+        senderReference::
+        type: string
+        receiverReference:
+          type: string
+        vas:
+          type: array
+          items:
+            $ref: '#/components/schemas/vas'
+        reference:
+          type: array
+          items:
+            $ref: '#/components/schemas/reference'
+        freeText:
+          type: array
+          items:
+            $ref: '#/components/schemas/freeText'
+        dateTime:
+          type: array
+          items:
+            $ref: '#/components/schemas/dateAndTime'
+        trackingRecipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/trackingRecipients'
+        partyConsignor:
+          $ref: '#/components/schemas/partyConsignor'
+        partyConsignee:
+          $ref: '#/components/schemas/partyConsignee'
+        party:
+          type: array
+          items:
+            $ref: '#/components/schemas/party'
+        dangerousGoods:
+          type: array
+          items:
+            $ref: '#/components/schemas/dangerousGoods'
+        cashOnDelivery:
+          $ref: '#/components/schemas/cashOnDelivery'
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/charges'
+        insurance:
+          $ref: '#/components/schemas/insurance'
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/equipment'
+        auditLog:
+          $ref: '#/components/schemas/auditLog'
+        consignmentEvent:
+          type: array
+          items:
+            $ref: '#/components/schemas/consignmentEvent'
+    vas:
+      type: object
+      properties:
+        vasCode:
+          type: string
+        serviceRequirements:
+          type: string
+        discountPercent:
+          type: string
+        createdProgramId:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        modifiedProgramId:
+          type: string
+        modifiedTimestamp:
+          type: string
+          format: date-time
+    freeText:
+      type: object
+      properties:
+        type:
+          type: string
+        text:
+          type: string
+        sequence:
+          type: integer
+          format: int32
+
+    dateAndTime:
+      type: object
+      properties:
+        type:
+          type: string
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          pattern: '^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$'
+    trackingRecipients:
+      type: object
+      properties:
+        ident:
+          type: string
+        actorNo:
+          type: string
+        type:
+          type: string
+    partyConsignor:
+      type: object
+      properties:
+        name:
+          type: string
+        soundexName:
+          type: string
+        actorNo:
+          type: string
+        system:
+          type: string
+        partyId:
+          type: string
+        subpartyId:
+          type: string
+        idCodeList:
+          type: string
+        function:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        telefax:
+          type: string
+        email:
+          type: string
+        createdProgramId:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        modifiedProgramId:
+          type: string
+        modifiedTimestamp:
+          type: string
+          format: date-time
+        postalAddress:
+          $ref: '#/components/schemas/postalAddress'
+        pickupAddress:
+          $ref: '#/components/schemas/pickupAddress'
+        reference:
+          type: array
+          items:
+            $ref: '#/components/schemas/reference'
+    pickupAddress:
+      type: object
+      properties:
+        street:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        countryCode:
+          type: string
+    partyConsignee:
+      type: object
+      properties:
+        name:
+          type: string
+        soundexName:
+          type: string
+        actorNo:
+          type: string
+        system:
+          type: string
+        partyId:
+          type: string
+        subpartyId:
+          type: string
+        idCodeList:
+          type: string
+        function:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        telefax:
+          type: string
+        email:
+          type: string
+        url:
+          type: string
+        digipostId:
+          type: string
+        personalAlias:
+          type: string
+        createdProgramId:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        modifiedProgramId:
+          type: string
+        modifiedTimestamp:
+          type: string
+          format: date-time
+        postalAddress:
+          $ref: '#/components/schemas/postalAddress'
+        deliveryAddress:
+          $ref: '#/components/schemas/deliveryAddress'
+        reference:
+          type: array
+          items:
+            $ref: '#/components/schemas/reference'
+    postalAddress:
+      type: object
+      properties:
+        street:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        countryCode:
+          type: string
+    deliveryAddress:
+      type: object
+      properties:
+        street:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        countryCode:
+          type: string
+    party:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        actorNo:
+          type: string
+        system:
+          type: string
+        partyId:
+          type: string
+        subpartyId:
+          type: string
+        idCodeList:
+          type: string
+        function:
+          type: string
+        phone:
+          type: string
+        mobile:
+          type: string
+        telefax:
+          type: string
+        email:
+          type: string
+        createdProgramId:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        modifiedProgramId:
+          type: string
+        modifiedTimestamp:
+          type: string
+          format: date-time
+        address:
+          type: array
+          items:
+            $ref: '#/components/schemas/address'
+        reference:
+          type: array
+          items:
+            $ref: '#/components/schemas/reference'
+    address:
+      type: object
+      properties:
+        type:
+          type: string
+        street:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        countryCode:
+          type: string
+    dangerousGoods:
+      type: object
+      properties:
+        regulationCode:
+          type: string
+        hazardCode:
+          type: string
+        additionalHazardCode:
+          type: string
+        unNo:
+          type: integer
+        packaging:
+          type: string
+        tunnelRestrictions:
+          type: string
+        techName:
+          type: string
+        netWeightKg:
+          type: integer
+          format: int64
+        netVolumeLitre:
+          type: integer
+          format: int64
+        hazardousGoodsPoints:
+          type: integer
+          format: int32
+    cashOnDelivery:
+      type: object
+      properties:
+        goodsDescription:
+          type: string
+        amount:
+          type: number
+          multipleOf: 0.01
+        amountCurrency:
+          type: string
+        controlIdentificationNumber:
+          type: string
+        accountNumber:
+          type: string
+        amountCheckDigit:
+          type: string
+        accountType:
+          type: string
+        createdProgramId:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        modifiedProgramId:
+          type: string
+        modifiedTimestamp:
+          type: string
+          format: date-time
+    charges:
+      type: object
+      properties:
+        chargeType:
+          type: string
+        chargeCode:
+          type: string
+        netAmount:
+          type: number
+          multipleOf: 0.01
+        netCurrency:
+          type: string
+        grossAmount:
+          type: number
+          multipleOf: 0.01
+        grossCurrency:
+          type: string
+    insurance:
+      type: object
+      properties:
+        goodsDescription:
+          type: string
+        insuredAmount:
+          type: number
+          multipleOf: 0.1
+        insuredAmountCurrency:
+          type: string
+    equipment:
+      type: object
+      properties:
+        equipmentType:
+          type: string
+        equipmentQuantity:
+          type: number
+    auditLog:
+      type: object
+      properties:
+        weekNumber:
+          type: string
+        modifiedProgramId:
+          type: string
+        modifiedTimestamp:
+          type: string
+        modifiedCompanyCode:
+          type: string
+        modifiedUserId:
+          type: string
+        createdProgramId:
+          type: string
+        createdTimestamp:
+          type: string
+        createdCompanyCode:
+          type: string
+        createdUserId:
+          type: string
+        messageId:
+          type: string
+    reference:
+      type: object
+      properties:
+        type:
+          type: string
+        text:
+          type: string
+    consignmentEvent:
+      type: object
+      properties:
+        consignmentNo:
+          type: string
+        eventDate:
+          type: string
+        eventTime:
+          type: string
+        eventCode:
+          type: string
+        actionCode:
+          type: string
+        reasonCode:
+          type: string
+        unitCode:
+          type: string
+        postCode:
+          type: string
+        countryCode:
+          type: string
+        companyCode:
+          type: string
+        consignmentNoSource:
+          type: string
+        status:
+          type: string
+        systemCode:
+          type: string
+        sourceSystem:
+          type: string
+        equipmentType:
+          type: string
+        equipmentId:
+          type: string
+        equipmentMsgCounter:
+          type: number
+        postReference:
+          type: string
+        handedOverToUnit:
+          type: string
+        shelfCode:
+          type: string
+        pickUpCode:
+          type: string
+        returnDate:
+          type: string
+        comments:
+          type: string
+        deliveryDetails:
+          $ref: '#/components/schemas/deliveryDetails'
+        signature:
+          $ref: '#/components/schemas/signature'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/images'
+        rbtInformation:
+          $ref: '#/components/schemas/rbtInformation'
+        coordinates:
+          $ref: '#/components/schemas/coordinates'
+        weightVolTemp:
+          $ref: '#/components/schemas/weightVolTemp'
+        attributes:
+          $ref: '#/components/schemas/attributes'
+        auditLog:
+          $ref: '#/components/schemas/auditLog'
+    deliveryDetails:
+      type: object
+      properties:
+        legitimationIdType:
+          type: string
+        legitimationId:
+          type: string
+        deliveredById:
+          type: string
+    signature:
+      type: object
+      properties:
+        receivedBy:
+          type: string
+        imageId:
+          type: string
+    images:
+      type: object
+      properties:
+        imageId:
+          type: string
+    rbtInformation:
+      type: object
+      properties:
+        routeId:
+          type: string
+        tripId:
+          type: string
+        stopId:
+          type: string
+        planId:
+          type: string
+        areaId:
+          type: string
+        locationId:
+          type: string
+        driverId:
+          type: string
+        truckId:
+          type: string
+        logicalLoadcarrierId:
+          type: string
+        physicalLoadcarrierId:
+          type: string
+        loadcarrierExternalId:
+          type: string
+        flexField:
+          type: string
+        combinationTripId:
+          type: string
+        telephoneNumber:
+          type: string
+        tmsOperationId:
+          type: string
+    coordinates:
+      type: object
+      properties:
+        xCoordinate:
+          type: string
+        yCoordinate:
+          type: string
+        coordinateSystem:
+          type: string
+        location:
+          type: string
+    weightVolTemp:
+      type: object
+      properties:
+        weight:
+          type: number
+        height:
+          type: number
+        length:
+          type: number
+        breadth:
+          type: number
+        temperature:
+          type: number
+        temperatureZone:
+          type: string
+        temperatureUnit:
+          type: string
+        environmentId:
+          type: string
+        timestamp:
+          type: string
+        timestampType:
+          type: string
+    attributes:
+      type: object
+      properties:
+        actorNoSource:
+          type: string
+        eventCodeSource:
+          type: string
+        actionCodeSource:
+          type: string
+        reasonCodeSource:
+          type: string
+        eventSource:
+          type: string
+        statusMassRegistration:
+          type: string
+        timestampUTC:
+          type: string
+        timezoneUTC:
+          type: number
+        totalRegistered:
+          type: number
+        volumeRegistered:
+          type: number
+        amountPaid:
+          type: number
+        chargeId:
+          type: string
+        emsStatus:
+          type: string
+        fullMaktCode:
+          type: string
+        damageTypeCode:
+          type: string
